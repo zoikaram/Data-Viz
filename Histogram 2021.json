@@ -1,0 +1,37 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "data": {
+    "name": "table",
+    "url": "https://raw.githubusercontent.com/soniasocadagui/dataviz/main/WBL_DataViz.json"
+  },
+  "title": "Income distribution of 2021",
+  "width": 600,
+  "height": 420,
+  "transform": [
+    {"filter": "datum.reportyr == 2021"},
+    {
+      "calculate": "if(datum.income_group === 'Low income', 0, if(datum.income_group === 'Lower middle income', 1, if(datum.income_group === 'Higher middle income', 2, if(datum.income_group === 'High income', 4, 3))))",
+      "as": "siteOrder"
+    }
+  ],
+  "mark": {"type": "bar", "binSpacing": 0},
+  "encoding": {
+    "x": {"bin": {"maxbins": 10}, "field": "wbl_index", "title": "WBL Index"},
+    "y": {"aggregate": "count", "title": "Number of economies"},
+    "color": {
+      "field": "income_group",
+      "legend": {"orient": "top", "title": null},
+      "scale": {
+        "domain": [
+          "High income",
+          "Upper middle income",
+          "Lower middle income",
+          "Low income"
+        ],
+        "range": ["#c30d24", "#f3a583", "#94c6da", "#1770ab"]
+      }
+    },
+    "order": {"field": "siteOrder"}
+  },
+  "config": {}
+}
